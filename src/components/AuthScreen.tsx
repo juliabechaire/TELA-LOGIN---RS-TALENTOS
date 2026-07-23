@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Leaf, Mail, Lock, User, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Leaf, Mail, Lock, User, ArrowLeft, Check } from 'lucide-react';
 
 type Mode = 'login' | 'register' | 'forgot';
 
@@ -9,7 +9,6 @@ export default function AuthScreen() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Campos do formulário — todos num único objeto por simplicidade neste rascunho
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -23,10 +22,15 @@ export default function AuthScreen() {
   const passwordsMatch = form.password === form.confirmPassword;
   const showMismatch = mode === 'register' && form.confirmPassword.length > 0 && !passwordsMatch;
 
+  const hasMinLength = form.password.length >= 8;
+  const hasLetter = /[a-zA-Z]/.test(form.password);
+  const hasNumber = /[0-9]/.test(form.password);
+  const isPasswordStrongEnough = hasMinLength && hasLetter && hasNumber;
+  const showPasswordHint = mode === 'register' && form.password.length > 0;
+
   return (
     <div className="min-h-screen bg-emerald-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        {/* Logo / cabeçalho */}
         <div className="flex flex-col items-center mb-6">
           <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center mb-3">
             <Leaf size={24} className="text-white" />
@@ -35,7 +39,6 @@ export default function AuthScreen() {
           <p className="text-sm text-zinc-500 mt-1">Monitoramento agrícola</p>
         </div>
 
-        {/* Card principal */}
         <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6">
 
           {mode === 'login' && (
@@ -159,6 +162,22 @@ export default function AuthScreen() {
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
+                  {showPasswordHint && (
+                    <ul className="mt-2 flex flex-col gap-0.5">
+                      <li className={`text-xs flex items-center gap-1.5 ${hasMinLength ? 'text-emerald-600' : 'text-zinc-400'}`}>
+                        <Check size={12} className={hasMinLength ? 'opacity-100' : 'opacity-30'} />
+                        Pelo menos 8 caracteres
+                      </li>
+                      <li className={`text-xs flex items-center gap-1.5 ${hasLetter ? 'text-emerald-600' : 'text-zinc-400'}`}>
+                        <Check size={12} className={hasLetter ? 'opacity-100' : 'opacity-30'} />
+                        Pelo menos 1 letra
+                      </li>
+                      <li className={`text-xs flex items-center gap-1.5 ${hasNumber ? 'text-emerald-600' : 'text-zinc-400'}`}>
+                        <Check size={12} className={hasNumber ? 'opacity-100' : 'opacity-30'} />
+                        Pelo menos 1 número
+                      </li>
+                    </ul>
+                  )}
                 </div>
 
                 <div>
@@ -191,7 +210,7 @@ export default function AuthScreen() {
                 </div>
 
                 <button
-                  disabled={!passwordsMatch || !form.password}
+                  disabled={!passwordsMatch || !isPasswordStrongEnough}
                   className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-zinc-300 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-xl transition-colors mt-2"
                 >
                   Criar conta
