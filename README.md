@@ -1,75 +1,93 @@
-# React + TypeScript + Vite
+# Sulflux — Tela de Login
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interface de autenticação (login, cadastro e recuperação de senha) para a plataforma Sulflux, um sistema de monitoramento agrícola com análise de carbono e hídrica de propriedades rurais.
 
-Currently, two official plugins are available:
+Este repositório contém **apenas a tela de autenticação**. É um front-end independente, que futuramente pode ser integrado ao restante da plataforma Sulflux.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologias utilizadas
 
-## React Compiler
+- **React** — biblioteca para construir a interface em componentes reutilizáveis
+- **TypeScript** — JavaScript com tipagem, ajuda a evitar erros antes mesmo de rodar o código
+- **Vite** — ferramenta que roda o projeto localmente durante o desenvolvimento e empacota os arquivos finais
+- **Tailwind CSS** — biblioteca de estilos, usada para toda a aparência visual (cores, espaçamento, cantos arredondados)
+- **lucide-react** — biblioteca de ícones
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Pré-requisitos
 
-## Expanding the ESLint configuration
+Antes de rodar este projeto, é necessário ter instalado:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Node.js** (versão 18 ou mais recente) — inclui automaticamente o **npm**
+- **Git** — para clonar o repositório
+- Um editor de código, recomendado o **VS Code**
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Para verificar se já tem o Node.js instalado, rode no terminal:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+node --version
+npm --version
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Se aparecer um número de versão para os dois comandos, está tudo certo. Caso contrário, baixe em [nodejs.org](https://nodejs.org) (versão LTS recomendada).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Como rodar o projeto pela primeira vez
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**1. Clonar o repositório**
+
+```bash
+git clone https://github.com/juliabechaire/TELA-LOGIN---RS-TALENTOS.git
+cd TELA-LOGIN---RS-TALENTOS
+```
+
+**2. Instalar as dependências**
+
+```bash
+npm install
+```
+
+**3. Rodar o servidor de desenvolvimento**
+
+```bash
+npm run dev
+```
+
+O terminal vai mostrar algo parecido com:
 
 ```
+VITE ready in 400 ms
+➜  Local:   http://localhost:5173/
+```
+
+**4. Abrir no navegador**
+
+Acesse o endereço mostrado no terminal (geralmente `http://localhost:5173/`). A tela de login deve carregar com fundo claro e destaque em verde.
+
+## Comandos úteis
+
+| Comando | O que faz |
+|---|---|
+| `npm run dev` | Inicia o servidor local de desenvolvimento, com atualização automática ao salvar arquivos |
+| `npm run build` | Gera a versão final otimizada do projeto, pronta para publicação (pasta `dist/`) |
+| `npm run preview` | Permite visualizar localmente a versão gerada pelo `build`, como ficaria em produção |
+
+## Estrutura do projeto
+
+```
+src/
+├── components/
+│   └── AuthScreen.tsx   → Componente único com os 3 modos: login, cadastro e recuperação de senha
+├── App.tsx              → Componente raiz da aplicação
+├── main.tsx             → Ponto de entrada, conecta o React ao HTML
+└── index.css            → Estilos globais (importa o Tailwind CSS)
+```
+
+## Funcionalidades da tela
+
+- **Login**: e-mail, senha (com opção de mostrar/ocultar), checkbox "Lembrar de mim", link para recuperação de senha
+- **Cadastro**: nome, e-mail, senha e confirmação de senha (com validação visual caso as senhas não coincidam)
+- **Recuperação de senha**: campo de e-mail para envio de link de redefinição
+
+Os três modos convivem numa única página, alternando por meio de botões/links, sem recarregar a tela.
+
+## Estado atual do projeto
+
+Esta tela está, por enquanto, **sem conexão com um backend real** — os botões de "Entrar", "Criar conta" e "Enviar link de recuperação" ainda não enviam dados para nenhum servidor. A validação existente (ex: confirmação de senha) é feita apenas no lado do cliente (navegador). A integração com autenticação real (backend, banco de dados de usuários, tokens de sessão) é um passo futuro do projeto.
